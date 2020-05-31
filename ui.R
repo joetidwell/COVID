@@ -141,6 +141,13 @@ dashboardPage(
       fluidPage(        
         fluidRow(
           column(8, 
+                 box(title=HTML("<span class='box-title-l1'>COVID-19 Data Explorer</span>"),
+                     footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
+                     p("This application visualizes various COVID-19 data, particulary for San Antonio, Texas. I created it because most COVID data dashboards I've seen focus on (what I think are) unhelpful metrics to understand how the pandemic is progressing."), width=12)
+                 )
+        ),
+        fluidRow(
+          column(8, 
                  box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                      footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                      plotlyOutput("plotCovidSA", height = 300), width=12)
