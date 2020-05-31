@@ -1,0 +1,21 @@
+.box-footer {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top: 1px solid #f4f4f4;
+    padding: 10px;
+    background-color: rgb(52, 62, 72);
+}
+
+
+.box-title-l1 {
+	font-size: 1.35em; color: #FFF;
+}
+
+
+.box-title-l2 {
+	margin-top: 3px;
+}
+
+
