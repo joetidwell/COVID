@@ -7,6 +7,8 @@ library(data.table)
 library(plotly)
 library(jsonlite)
 library(dplyr)
+library(readxl)
+
 # library(ggthemes)
 
 theme_set(theme_classic())
@@ -105,6 +107,70 @@ mydt.baselined[,rollingDeaths:=frollmean(Deaths, 7, align="center"), by=Country]
 
 mydt.baselined[,Country:=as.character(Country)]
 
+
+###
+### Texas DSHS data
+###
+
+###
+### By-county state deaths, cumulative
+###
+
+fname <- "data/TexasCOVID19DailyCountyFatalityCountData.xlsx"
+colnames <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[3,] %>% as.character()
+colnames <- c("County","Population",as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=length(colnames)-2)))
+mydt.tx <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:267),] %>%
+  data.table()
+setnames(mydt.tx, colnames)
+mydt.tx <- melt(mydt.tx, id.vars=c("County","Population"), variable.name="Date", value.name="Deaths.Cumulative") %>%
+  data.table()
+mydt.tx[,Date:=as.IDate(Date)]
+mydt.tx[,Population:=as.numeric(Population)]
+# Convert cumulative to daily counts
+setkey(mydt.tx,Date)
+mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
+
+
+###
+### By-county state cases, cumulative
+###
+
+fname <- "data/TexasCOVID19DailyCountyCaseCountData.xlsx"
+colnames <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[3,] %>% as.character()
+colnames <- c("County",
+              "Population",
+              as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=3)),
+              as.character(seq.Date(from=as.IDate("2020-03-09"),by="day",length.out=5)),
+              as.character(seq.Date(from=as.IDate("2020-03-15"),by="day",length.out=length(colnames)-10))              
+              )
+mydt.tx.case <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:268),] %>%
+  data.table()
+setnames(mydt.tx.case, colnames)
+mydt.tx.case <- melt(mydt.tx.case, id.vars=c("County","Population"), variable.name="Date", value.name="Cases.Cumulative") %>%
+  data.table()
+mydt.tx.case[,Cases.Cumulative := as.numeric(Cases.Cumulative)]
+mydt.tx.case[,Date:=as.IDate(Date)]
+mydt.tx.case[,Population:=as.numeric(Population)]
+# Convert cumulative to daily counts
+setkey(mydt.tx.case,Date)
+mydt.tx.case[, Cases := Cases.Cumulative - shift(Cases.Cumulative, 1), by=County]
+setkeyv(mydt.tx.case,c("County","Date"))
+setkeyv(mydt.tx,c("County","Date"))
+mydt.tx <- mydt.tx.case[,.(County,Date,Cases.Cumulative,Cases)][mydt.tx]
+
+###
+### Nursing home and long term facility deaths, state-wide
+###
+
+fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
+nurse.dt <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
+setnames(nurse.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
+nurse.dt[,Source:="Nursing Homes"]
+fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
+long.dt <- read_excel(fname, sheet = 2, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
+setnames(long.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
+long.dt[,Source:="Long-Term Care Facilities"]
+nurse.tx.dt <- rbind(nurse.dt, long.dt)
 
 
 
