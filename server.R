@@ -408,6 +408,16 @@ shinyServer(function(input, output, session) {
     tsCovidVentsSA()
   })
 
+
+  output$plotCovidSATX <- renderPlotly({
+    tscovid1()
+  })
+
+  output$plotCovidVentsSATX <- renderPlotly({
+    tsCovidVentsSA()
+  })
+
+
   output$plotCovidStates <- renderPlotly({
     tsCovidStates(input)
   })
