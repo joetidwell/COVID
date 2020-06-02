@@ -86,6 +86,7 @@ mydt.state[, Deaths := Deaths/Population * 1000000]
 setkey(mydt.state, Date)
 mydt.state[,rollingDeaths:=frollmean(Deaths, 7, align="center"), by=State]
 
+mydt.state[,rankDeath:=rank(death/Population),by=Date]
 
 mydt.countries <- read.csv("data/countries.csv") %>% data.table
 mydt.countries[,Date:=as.IDate(dateRep, format="%d/%m/%Y")]
@@ -128,6 +129,7 @@ mydt.tx[,Date:=as.IDate(Date)]
 mydt.tx[,Population:=as.numeric(Population)]
 # Convert cumulative to daily counts
 setkey(mydt.tx,Date)
+mydt.tx[,Deaths.Cumulative:=as.numeric(Deaths.Cumulative)]
 mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
 
 
@@ -430,6 +432,38 @@ shinyServer(function(input, output, session) {
   output$variables = renderUI({
     selectInput('variables2', 'Variables', outVar())
   })
+
+  output$boxUSDeaths <- renderValueBox({
+    valueBox(
+      paste0(comma(mydt.countries[Country=="United_States_of_America",.(Country,Date,deaths)][,sum(deaths)])), 
+      "Progress", icon = icon("list"),
+      color = "purple"
+    )
+  })
+
+  output$boxTXDeaths <- renderValueBox({
+    valueBox(
+      paste0(comma(mydt.tx[County=="Total",max(Deaths.Cumulative)])), 
+      "Progress", icon = icon("list"),
+      color = "purple"
+    )
+  })
+
+
+
+  output$titleTXDaily <- renderUI({ 
+    tmpdate <- mydt.tx[County=="Total",max(Date)]
+    HTML(paste0("<span class='box-title-l1'>Texas Daily Summary - ", month.abb[month(tmpdate)], " ", scales::ordinal(mday(tmpdate)) ,"</span>"))
+  })
+
+
+  output$TXTodayDeaths <- renderText({ 
+    mydt.tx[County=="Total"][Date==max(Date)]$Deaths
+  })
+
+
+
+  
 
 
   # updateSelectizeInput(session, 'selectState', choices = mydt.state[,sort(unique(State))], server = TRUE)

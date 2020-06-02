@@ -118,6 +118,17 @@ theme_grey_dark <- shinyDashboardThemeDIY(
 
 style.boxtitle <- "style='font-size: 1.35em; color: #FFF;'"
 
+joeBox <- function(metric="70%", text="Some Text", color="olive", width=3) {
+  box(
+      width=width,
+      background=color,
+      align="center",
+      HTML(paste0("<span style='font-size: 2.5em; font-weight: bold; color: white;'>",metric,"</span>
+                  <p style='font-size: 1.5em;'>",text,"</p>"))
+    )
+}
+
+
 
 width.main <- 10
 width.side <- 2
@@ -128,8 +139,8 @@ dashboardPage(
   dashboardSidebar(
     HTML('<br/><br/>'),
     sidebarMenu(
-      menuItem("All Data", tabName = "covid", icon = icon("dna")),
-      menuItem("Texas", tabName = "texas", icon = icon("dna"))
+      menuItem("Texas", tabName = "texas", icon = icon("dna")),
+      menuItem("All Data", tabName = "covid", icon = icon("dna"))
     )
   ),
   # dashboardSidebar(disable=TRUE),
@@ -150,6 +161,17 @@ dashboardPage(
                        footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
                        p("This application visualizes various COVID-19 data, particulary for San Antonio, Texas. I created it because most COVID data dashboards I've seen focus on (what I think are) unhelpful metrics to understand how the pandemic is progressing."), width=12)
             )
+          ),
+          fluidRow(
+            column(width.main, 
+              box(title=uiOutput("titleTXDaily"),
+                  joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
+                  joeBox(color="blue"),
+                  joeBox(color="purple"),
+                  joeBox(color="orange"),
+                  width=12
+              )
+           ),
           ),
           fluidRow(
             column(width.main, 
