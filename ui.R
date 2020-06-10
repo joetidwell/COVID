@@ -7,6 +7,8 @@ library(plotly)
 library(dashboardthemes)
 library(data.table)
 library(dplyr)
+library(shinycssloaders)
+library(leaflet)
 
 mydt.country <- read.csv("data/countries.csv") %>% data.table
 countries <- as.character(mydt.country[, unique(countriesAndTerritories)])
@@ -163,16 +165,43 @@ dashboardPage(
             )
           ),
           fluidRow(
-            column(width.main, 
-              box(title=uiOutput("titleTXDaily"),
+            column(5,
+              box(width=12,
+                title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
+                footer=HTML("Footer"),
+                leafletOutput("leafTX") %>% withSpinner(color="#0dc5c1")
+              )
+            ),
+            column(5,
+              box(width=12,
+                title=HTML("Percent Change Since Peak Week"),
+                footer=HTML("Footer"),
                   joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
                   joeBox(color="blue"),
                   joeBox(color="purple"),
-                  joeBox(color="orange"),
-                  width=12
+                  joeBox(color="orange")
+              ),
+              box(width=12,
+                title=HTML("Percent Change Since Previous Week"),
+                footer=HTML("Footer"),
+                  joeBox(width=3),
+                  joeBox(color="blue"),
+                  joeBox(color="purple"),
+                  joeBox(color="orange")
               )
-           ),
+            )            
           ),
+          # fluidRow(
+          #   column(width.main, 
+          #     box(title=uiOutput("titleTXDaily"),
+          #         joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
+          #         joeBox(color="blue"),
+          #         joeBox(color="purple"),
+          #         joeBox(color="orange"),
+          #         width=12
+          #     )
+          #  ),
+          # ),
           fluidRow(
             column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),

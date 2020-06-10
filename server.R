@@ -9,6 +9,12 @@ library(jsonlite)
 library(dplyr)
 library(readxl)
 
+library(rgdal)
+library(RColorBrewer)
+library(leaflet)
+library(tigris)
+
+
 # library(ggthemes)
 
 theme_set(theme_classic())
@@ -173,6 +179,42 @@ long.dt <- read_excel(fname, sheet = 2, col_names = FALSE, col_types = NULL, na 
 setnames(long.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
 long.dt[,Source:="Long-Term Care Facilities"]
 nurse.tx.dt <- rbind(nurse.dt, long.dt)
+
+
+
+
+###
+### Mapping Data
+###
+
+load(file="data/txCounties.RData")
+# Merge sata with shapefile
+tmpdata <- data.table(county=unique(tx.counties$NAME), value=1:length(unique(tx.counties$NAME)))
+tmpdt <- mydt.tx[Date==max(Date),
+                 .(d.per.1000=Deaths.Cumulative/Population*100000,
+                   Deaths=Deaths.Cumulative),
+                 by=County]
+tmpdt[d.per.1000==0,d.per.1000:=NA]
+tx.counties_merged_sb <- geo_join(tx.counties, tmpdt, "NAME", "County")
+
+
+# Getting rid of rows with NA values
+# Using the Base R method of filtering subset() because we're dealing with a SpatialPolygonsDataFrame and not a normal data frame, thus filter() wouldn't work
+tx.counties_merged_sb <- subset(tx.counties_merged_sb, !is.na(d.per.1000))
+pal <- colorBin("Reds", 
+                domain=tx.counties_merged_sb$d.per.1000, 
+                bins=c(0,1,5,10,25,50,75,100), 
+                reverse=FALSE)
+
+
+# Setting up the pop up text
+popup_sb <- paste0("<b>",as.character(tx.counties_merged_sb$County)," County</b><br/>" ,
+                   "<em>Deaths per 100k</em>: ", as.character(round(tx.counties_merged_sb$d.per.1000,2)),"<br/>",
+                   "<em>Total Deaths</em>: ", as.character(tx.counties_merged_sb$Deaths))
+popup_sb <- lapply(popup_sb, htmltools::HTML)
+
+
+
 
 
 
@@ -396,6 +438,40 @@ tsCovidCountries <- function(input) {
 
 }
 
+
+mapTX <- function(input) {
+  leaflet() %>%
+    addProviderTiles("CartoDB.DarkMatter") %>%
+    setView(-98.483330, 38.712046, zoom = 4) %>%
+    addPolylines(data = tx.counties, color = "white", opacity = 1, weight = 1) %>%
+    addPolygons(data = tx.counties_merged_sb , 
+                fillColor = ~pal(tx.counties_merged_sb$d.per.1000), 
+                fillOpacity = 0.5,
+                # fill=FALSE, 
+                weight = 2,
+                color="#CCC",
+                opacity=0, 
+                smoothFactor = 0.2, 
+                popup = ~popup_sb,
+                highlight = highlightOptions(
+                    weight = 50,
+                    color = "#1ce45c",
+                    fillOpacity = 1,
+                    bringToFront = TRUE),
+                label=popup_sb,
+                labelOptions = labelOptions(
+                  style = list("font-weight" = "normal", padding = "3px 8px"),
+                  textsize = "15px",
+                  direction = "auto")
+    ) %>%
+    addLegend(pal = pal, 
+              values = tx.counties_merged_sb$d.per.1000, 
+              position = "bottomright", 
+              title = "Deaths per 100,000") %>%
+    setView(-99.9018,31.9686,
+                zoom = 6  )    
+}
+
 shinyServer(function(input, output, session) {
 
 ####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -462,7 +538,13 @@ shinyServer(function(input, output, session) {
   })
 
 
+####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#### Maps
+####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  output$leafTX <- renderLeaflet({
+    mapTX()
+  })
   
 
 
