@@ -14,6 +14,7 @@ mydt.country <- read.csv("data/countries.csv") %>% data.table
 countries <- as.character(mydt.country[, unique(countriesAndTerritories)])
 
 
+
 theme_grey_dark <- shinyDashboardThemeDIY(
 
   ### general
@@ -144,7 +145,8 @@ dashboardPage(
       menuItem("Texas", tabName = "texas", icon = icon("dna")),
       menuItem("All Data", tabName = "covid", icon = icon("dna"))
     )
-  ),
+  )
+  ,
   # dashboardSidebar(disable=TRUE),
   dashboardBody(
     # shinyDashboardThemes(
@@ -173,21 +175,34 @@ dashboardPage(
               )
             ),
             column(5,
-              box(width=12,
-                title=HTML("Percent Change Since Peak Week"),
-                footer=HTML("Footer"),
-                  joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
-                  joeBox(color="blue"),
-                  joeBox(color="purple"),
-                  joeBox(color="orange")
-              ),
+              # box(width=12,
+              #   title=HTML("Percent Change Since Peak Week"),
+              #   footer=HTML("Footer"),
+              #     joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
+              #     joeBox(color="blue"),
+              #     joeBox(color="purple"),
+              #     joeBox(color="orange")
+              # ),
               box(width=12,
                 title=HTML("Percent Change Since Previous Week"),
                 footer=HTML("Footer"),
-                  joeBox(width=3),
-                  joeBox(color="blue"),
-                  joeBox(color="purple"),
-                  joeBox(color="orange")
+                HTML("<h1>Howdy</h1>
+<table class='darkTable'>
+<tbody>
+  <tr>
+    <td width='50%' style='background-color: #4CAF50;'>
+      <span style='font-size: 1.5em;'>Deaths</span><br/>
+      <span style='font-size: 3em;'>200</span><br/>
+      <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+    </td>
+    <td width='50%'>cell2_1</td>
+  </tr>
+  <tr>
+    <td>cell1_2</td>
+    <td>cell2_2</td>
+    </tr>
+</tbody>
+</table>")
               )
             )            
           ),

@@ -27,7 +27,6 @@ theme_set(theme_classic())
 c.fig.bg <- "#1e282c"
 
 
-
 ###
 ### COVID Data
 ###
@@ -101,7 +100,7 @@ mydt.countries[, deaths := as.numeric(deaths)]
 # Because Spain reported -1k+ deaths on a day...
 mydt.countries[deaths<0, deaths:=0]
 # Adjust for deaths per 1,000,000
-mydt.countries[, Deaths:=deaths/popData2018*1000000]
+mydt.countries[, Deaths:=deaths/popData2019*1000000]
 # Rolling Average
 mydt.countries[,rollingDeaths:=frollmean(Deaths, 7, align="center"), by=Country]
 # Start from day of first reported death
@@ -452,7 +451,7 @@ mapTX <- function(input) {
                 color="#CCC",
                 opacity=0, 
                 smoothFactor = 0.2, 
-                popup = ~popup_sb,
+                # popup = ~popup_sb,
                 highlight = highlightOptions(
                     weight = 50,
                     color = "#1ce45c",
