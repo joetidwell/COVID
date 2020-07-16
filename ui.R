@@ -131,6 +131,41 @@ joeBox <- function(metric="70%", text="Some Text", color="olive", width=3) {
     )
 }
 
+joeBox2 <- function(colors=c("#4CAF50","#4CAF50","#4CAF50","#4CAF50")) {
+
+paste0("
+<h1>Howdy</h1>
+<table class='darkTable' style='border: 1px solid black;'>
+  <tbody>
+    <tr>
+      <td width='50%' style='background-color: ",colors[1],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>Deaths</span><br/>
+        <span style='font-size: 3em;'>200</span><br/>
+        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      </td>
+      <td width='50%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>Deaths</span><br/>
+        <span style='font-size: 3em;'>200</span><br/>
+        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      </td>
+    </tr>
+    <tr>
+      <td width='50%' style='background-color: ",colors[3],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>Deaths</span><br/>
+        <span style='font-size: 3em;'>200</span><br/>
+        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      </td>
+      <td width='50%' style='background-color: ",colors[4],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>Deaths</span><br/>
+        <span style='font-size: 3em;'>200</span><br/>
+        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+")
+
+}
 
 
 width.main <- 10
@@ -186,23 +221,7 @@ dashboardPage(
               box(width=12,
                 title=HTML("Percent Change Since Previous Week"),
                 footer=HTML("Footer"),
-                HTML("<h1>Howdy</h1>
-<table class='darkTable'>
-<tbody>
-  <tr>
-    <td width='50%' style='background-color: #4CAF50;'>
-      <span style='font-size: 1.5em;'>Deaths</span><br/>
-      <span style='font-size: 3em;'>200</span><br/>
-      <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
-    </td>
-    <td width='50%'>cell2_1</td>
-  </tr>
-  <tr>
-    <td>cell1_2</td>
-    <td>cell2_2</td>
-    </tr>
-</tbody>
-</table>")
+                HTML(joeBox2())
               )
             )            
           ),
@@ -218,14 +237,14 @@ dashboardPage(
           #  ),
           # ),
           fluidRow(
-            column(width.main, 
+            column(7, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidSATX", height = 300), width=12)
                    ),
           ),
           fluidRow(
-            column(width.main, 
+            column(7, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Hospital Resources</span><p class='box-title-l2'>Daily Percentages w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidVentsSATX", height = 300), width=12)
