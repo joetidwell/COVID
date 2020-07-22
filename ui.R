@@ -206,7 +206,7 @@ dashboardPage(
                              I have no political agenda behind this site other than providing people access to useful data.</p>
                              <ul>
                                 <li>You can click and/or hover on just about any part of any plot to get more information.</li>
-                                <li>The menu at the top-right pf every plot lets you do a lot of cool things, including downloading an image.</li>
+                                <li>The menu at the top-right of every plot lets you do a lot of cool things, including downloading an image.</li>
                                 <li>I will update this site with better data as I have time in between trying to earn a living.</li>
                                 <li>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</li>
                              </ul>"), width=12)
@@ -283,7 +283,7 @@ dashboardPage(
                              I have no political agenda behind this site other than providing people access to useful data.</p>
                              <ul>
                                 <li>You can click and/or hover on just about any part of any plot to get more information.</li>
-                                <li>The menu at the top-right pf every plot lets you do a lot of cool things, including downloading an image.</li>
+                                <li>The menu at the top-right of every plot lets you do a lot of cool things, including downloading an image.</li>
                                 <li>I will update this site with better data as I have time in between trying to earn a living.</li>
                                 <li>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</li>
                              </ul>"), width=12)
