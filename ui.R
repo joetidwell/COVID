@@ -198,7 +198,11 @@ dashboardPage(
             column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>COVID-19 Data Explorer</span>"),
                        footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
-                       p("This application visualizes various COVID-19 data, particulary for San Antonio, Texas. I created it because most COVID data dashboards I've seen focus on (what I think are) unhelpful metrics to understand how the pandemic is progressing."), width=12)
+                       HTML("<p>This application visualizes various COVID-19 data, particulary for San Antonio, Texas. 
+                             I created it because most COVID data dashboards I've seen focus on (what I think are) 
+                             unhelpful metrics to understand how the pandemic is progressing. 
+                             I have no political agenda behind this site other than providing people access to useful data.</p>
+                             <p>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</p>"), width=12)
             )
           ),
           fluidRow(
@@ -264,7 +268,11 @@ dashboardPage(
             column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>COVID-19 Data Explorer</span>"),
                        footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
-                       p("This application visualizes various COVID-19 data, particulary for San Antonio, Texas. I created it because most COVID data dashboards I've seen focus on (what I think are) unhelpful metrics to understand how the pandemic is progressing."), width=12)
+                       HTML("<p>This application visualizes various COVID-19 data, particulary for San Antonio, Texas. 
+                             I created it because most COVID data dashboards I've seen focus on (what I think are) 
+                             unhelpful metrics to understand how the pandemic is progressing. 
+                             I have no political agenda behind this site other than providing people access to useful data.</p>
+                             <p>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</p>"), width=12)
                    )
           ),
           fluidRow(
