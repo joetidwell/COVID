@@ -45,7 +45,7 @@ mydt.SA <- melt(mydt.SA, id.vars=c("Date"))
 mydt.SA <- mydt.SA[!is.na(value)]
 mydt.SA[,rolling:=frollmean(value, 7, align="center"), by=variable]
 
-levels(mydt.SA$variable) <- c("In ICU", "On Ventilator", "Deaths")
+levels(mydt.SA$variable) <- c("ICU Patients", "Ventilated Patients", "Patient Deaths")
 
 
 mydt.vents <- mydt[,.(Date, TotalVents, AvailVent, TotalStaffedBeds, AvailStaffedBeds, COVIDonVent)]
@@ -59,7 +59,7 @@ mydt.vents[,rolling:=frollmean(value, 7, align="center"), by=variable]
 
 
 levels(mydt.vents$variable) <- c("TotalVents", "AvailVent", "TotalStaffedBeds", "AvailStaffedBeds",
-                                 "COVIDonVent", "% Available Ventilators", "% Available Beds", "% Ventilators used<br>by COVID Patients")
+                                 "COVIDonVent", "Available Ventilators", "Available Beds", "Ventilators used<br>by COVID Patients")
 
 
 # Load cumulative data from https://covidtracking.com/data/state
@@ -274,7 +274,7 @@ tsCovidVentsSA <- function() {
 
 
 
-    plot_ly(data = mydt.vents[variable %in% c("% Available Ventilators", "% Available Beds", "% Ventilators used<br>by COVID Patients")], 
+    plot_ly(data = mydt.vents[variable %in% c("Available Ventilators", "Available Beds", "Ventilators used<br>by COVID Patients")], 
             y = ~rolling, 
             x = ~Date,
             color = ~variable,
@@ -293,7 +293,7 @@ tsCovidVentsSA <- function() {
                 color = ~variable,
                 hoverinfo = "text",
                 text = ~paste('</br>', Date,
-                              '</br>', variable, ': ', round(value,1)),
+                              '</br>', variable, ': ', round(value,1), "%"),
                 showlegend = FALSE,
                 opacity = 1
       ) %>%
