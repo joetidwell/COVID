@@ -6,4 +6,4 @@ wget -O countries.csv 'http://opendata.ecdc.europa.eu/covid19/casedistribution/c
 wget --no-check-certificate -O TexasCOVID19DailyCountyFatalityCountData.xlsx https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx
 wget --no-check-certificate -O TexasCOVID19DailyCountyCaseCountData.xlsx https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyCaseCountData.xlsx
 wget --no-check-certificate -O COVID-19OutbreaksinLong-termCareFacilities.xlsx https://dshs.texas.gov/coronavirus/COVID-19OutbreaksinLong-termCareFacilities.xlsx
-
+wget --no-check-certificate -O TexasCOVID19CaseCountData.xlsx https://dshs.texas.gov/coronavirus/TexasCOVID19CaseCountData.xlsx

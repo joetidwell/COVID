@@ -131,39 +131,42 @@ joeBox <- function(metric="70%", text="Some Text", color="olive", width=3) {
     )
 }
 
-joeBox2 <- function(colors=c("#4CAF50","#4CAF50","#4CAF50","#4CAF50")) {
+joeBox2 <- function(colors=c("#4CAF50","#008080","#4CAF50","#4CAF50")) {
 
 paste0("
-<h1>Howdy</h1>
 <table class='darkTable' style='border: 1px solid black;'>
   <tbody>
     <tr>
-      <td width='50%' style='background-color: ",colors[1],"; border: 8px solid rgb(52,62,72);'>
-        <span style='font-size: 1.5em;'>Deaths</span><br/>
-        <span style='font-size: 3em;'>200</span><br/>
-        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
-      </td>
-      <td width='50%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
-        <span style='font-size: 1.5em;'>Deaths</span><br/>
-        <span style='font-size: 3em;'>200</span><br/>
-        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      <td colspan='3' width='100%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;''>Deaths Past 7 Days</span><br/>
+        <span style='font-size: 3em;'>",textOutput("TXDeaths7", inline=TRUE),"</span><br/>
+        <span style='font-size: 3em;'>",textOutput("TXDeaths7Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>From previous 7 days</span>
       </td>
     </tr>
     <tr>
-      <td width='50%' style='background-color: ",colors[3],"; border: 8px solid rgb(52,62,72);'>
-        <span style='font-size: 1.5em;'>Deaths</span><br/>
-        <span style='font-size: 3em;'>200</span><br/>
-        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 14 Days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths14", inline=TRUE),"</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths14Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>From previous 14 days</span><br/>
       </td>
-      <td width='50%' style='background-color: ",colors[4],"; border: 8px solid rgb(52,62,72);'>
-        <span style='font-size: 1.5em;'>Deaths</span><br/>
-        <span style='font-size: 3em;'>200</span><br/>
-        <span style='font-style: italic;'>Confirmed COVID-19 Deaths To Date</span>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 30 Days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths30", inline=TRUE),"</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths30Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>From previous 30 days</span><br/>
+      </td>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 60 Days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths60", inline=TRUE),"</span><br/>
+        <span style='font-size: 2em;'>",textOutput("TXDeaths60Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>From previous 60 days</span><br/>
       </td>
     </tr>
   </tbody>
 </table>
-")
+", collapse="")
 
 }
 
@@ -218,7 +221,7 @@ dashboardPage(
               box(width=12,
                 title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
                 footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx</a></i>"),
-                leafletOutput("leafTX") %>% withSpinner(color="#0dc5c1")
+                leafletOutput("leafTX", height="400px") %>% withSpinner(color="#0dc5c1")
               )
             ),
             column(5,
@@ -231,8 +234,8 @@ dashboardPage(
               #     joeBox(color="orange")
               # ),
               box(width=12,
-                title=HTML("Percent Change Since Previous Week"),
-                footer=HTML("Footer"),
+                title=HTML("Texas COVID19 Death Trends"),
+                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx</a></i>"),
                 HTML(joeBox2())
               )
             )            

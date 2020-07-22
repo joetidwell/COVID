@@ -13,7 +13,7 @@ library(rgdal)
 library(RColorBrewer)
 library(leaflet)
 library(tigris)
-
+library(R.cache)
 
 # library(ggthemes)
 
@@ -125,7 +125,11 @@ mydt.baselined[,Country:=as.character(Country)]
 ### By-county state deaths, cumulative
 ###
 
+
+
+
 fname <- "data/TexasCOVID19DailyCountyFatalityCountData.xlsx"
+# fname <- "~/Downloads/TexasCOVID19DailyCountyFatalityCountData.xlsx"
 colnames <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[3,] %>% as.character()
 colnames <- c("County","Population",as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=length(colnames)-2)))
 mydt.tx <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:267),] %>%
@@ -139,6 +143,26 @@ mydt.tx[,Population:=as.numeric(Population)]
 setkey(mydt.tx,Date)
 mydt.tx[,Deaths.Cumulative:=as.numeric(Deaths.Cumulative)]
 mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
+
+
+
+
+
+# Get Past X data
+today <- mydt.tx[,max(Date)]
+
+TXDeaths7 <- mydt.tx[Date>today-7,sum(Deaths)]
+TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
+
+
+TXDeaths14 <- mydt.tx[Date>today-14,sum(Deaths)]
+TXDeaths14Pre <- mydt.tx[(Date<=today-14) & (Date>today-28),sum(Deaths)]
+
+TXDeaths30 <- mydt.tx[Date>today-30,sum(Deaths)]
+TXDeaths30Pre <- mydt.tx[(Date<=today-30) & (Date>today-60),sum(Deaths)]
+
+TXDeaths60 <- mydt.tx[Date>today-60,sum(Deaths)]
+TXDeaths60Pre <- mydt.tx[(Date<=today-60) & (Date>today-120),sum(Deaths)]
 
 
 ###
@@ -191,6 +215,9 @@ nurse.tx.dt <- rbind(nurse.dt, long.dt)
 
 load(file="data/txCounties.RData")
 # Merge sata with shapefile
+
+
+
 tmpdata <- data.table(county=unique(tx.counties$NAME), value=1:length(unique(tx.counties$NAME)))
 tmpdt <- mydt.tx[Date==max(Date),
                  .(d.per.1000=Deaths.Cumulative/Population*100000,
@@ -431,7 +458,6 @@ tsCovidStates <- function(input) {
 }
 
 
-
 tsCovidCountries <- function(input) {
 
     if(is.null(input$selectCountry)) {
@@ -559,6 +585,7 @@ shinyServer(function(input, output, session) {
     tsCovidStates(input)
   })
 
+
   output$plotCovidCountries <- renderPlotly({
     tsCovidCountries(input)
   })
@@ -594,6 +621,63 @@ shinyServer(function(input, output, session) {
 
   output$TXTodayDeaths <- renderText({ 
     mydt.tx[County=="Total"][Date==max(Date)]$Deaths
+  })
+
+
+
+  output$TXDeaths7 <- renderText({ 
+    comma(TXDeaths7)
+  })
+
+  output$TXDeaths7Per <- renderText({ 
+    num <- as.integer(round((TXDeaths7-TXDeaths7Pre)/TXDeaths7Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0("-",num,"%")
+    }
+  })
+
+
+  output$TXDeaths14 <- renderText({ 
+    comma(TXDeaths14)
+  })
+
+  output$TXDeaths14Per <- renderText({ 
+    num <- as.integer(round((TXDeaths14-TXDeaths14Pre)/TXDeaths14Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0("-",num,"%")
+    }
+  })
+
+
+  output$TXDeaths30 <- renderText({ 
+    comma(TXDeaths30)
+  })
+
+  output$TXDeaths30Per <- renderText({ 
+    num <- as.integer(round((TXDeaths30-TXDeaths30Pre)/TXDeaths30Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0("-",num,"%")
+    }
+  })
+
+
+  output$TXDeaths60 <- renderText({ 
+    comma(TXDeaths60)
+  })
+
+  output$TXDeaths60Per <- renderText({ 
+    num <- as.integer(round((TXDeaths60-TXDeaths60Pre)/TXDeaths60Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0("-",num,"%")
+    }
   })
 
 
