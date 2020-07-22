@@ -406,7 +406,7 @@ tsCovidStates <- function(input) {
                               '</br>',day, 'days since 1st death',
                               '</br> Deaths : ', comma(round(DeathsRaw)), ' (',round(Deaths, 1), '/ 1M)'),
                 showlegend = FALSE,
-                opacity = 1
+                opacity = .25
       ) %>%
       layout(
         xaxis = list(title="Days Since First Reported Death", 
