@@ -200,9 +200,15 @@ dashboardPage(
                        footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
                        HTML("<p>This application visualizes various COVID-19 data, particulary for San Antonio, Texas. 
                              I created it because most COVID data dashboards I've seen focus on (what I think are) 
-                             unhelpful metrics to understand how the pandemic is progressing. 
+                             unhelpful metrics to understand how the pandemic is progressing or provide so much data it's difficult to pick out what matters most. One example is testing data.
+                             Differences in how tests are administered, what \"counts\" as a positive test, whether subsequent tests on someone 
+                             who tests positive count as an additional case, etc, all make testing numbers by themselves particularly unhelpful in evaluating the pandemic.
                              I have no political agenda behind this site other than providing people access to useful data.</p>
-                             <p>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</p>"), width=12)
+                             <ul>
+                                <li>You can click and/or hover on just about any part of any plot to get more information.</li>
+                                <li>I will update this site with better data as I have time in between trying to earn a living.</li>
+                                <li>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</li>
+                             </ul>"), width=12)
             )
           ),
           fluidRow(
@@ -270,9 +276,15 @@ dashboardPage(
                        footer=HTML("WebApp Source Code: <i><a href='https://github.com/joetidwell/COVID' target='_blank'>https://github.com/joetidwell/COVID</a></i>"),
                        HTML("<p>This application visualizes various COVID-19 data, particulary for San Antonio, Texas. 
                              I created it because most COVID data dashboards I've seen focus on (what I think are) 
-                             unhelpful metrics to understand how the pandemic is progressing. 
+                             unhelpful metrics to understand how the pandemic is progressing or provide so much data it's difficult to pick out what matters most. One example is testing data.
+                             Differences in how tests are administered, what \"counts\" as a positive test, whether subsequent tests on someone 
+                             who tests positive count as an additional case, etc, all make testing numbers by themselves particularly unhelpful in evaluating the pandemic.
                              I have no political agenda behind this site other than providing people access to useful data.</p>
-                             <p>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</p>"), width=12)
+                             <ul>
+                                <li>You can click and/or hover on just about any part of any plot to get more information.</li>
+                                <li>I will update this site with better data as I have time in between trying to earn a living.</li>
+                                <li>Source code and data for this site can be found at <a href='https://github.com/joetidwell/COVID'>https://github.com/joetidwell/COVID</a>.</li>
+                             </ul>"), width=12)
                    )
           ),
           fluidRow(
