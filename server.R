@@ -225,7 +225,55 @@ popup_sb <- lapply(popup_sb, htmltools::HTML)
 
 tscovid1 <- function(txtsize=1, inflation=FALSE) {
 
-    plot_ly(data = mydt.SA, 
+    plot_ly(data = mydt.SA[!(variable%in%"Patient Deaths")], 
+            y = ~rolling, 
+            x = ~Date,
+            color = ~variable,
+            type = "scatter",
+            mode = "lines",
+            legendgroup = ~variable,
+            hoverinfo = "text",
+            text = ~paste('</br>', Date,
+                          '</br>', `variable`,
+                          '</br> 7 Day Moving Avg : ', round(`rolling`,2))
+      ) %>%
+      add_trace(y = ~value, 
+                name = 'Daily Count', 
+                mode = 'markers', 
+                color = ~variable,
+                hoverinfo = "text",
+                legendgroup = ~variable,
+                text = ~paste('</br>', Date,
+                              '</br>', variable, ': ', value),
+                showlegend = FALSE,
+                opacity = 1
+      ) %>%
+      layout(
+        xaxis = list(title="Date", 
+                     tickcolor = "#666",
+                     gridcolor = "#666",
+                     zerolinecolor = "#CCC"),
+        yaxis = list(title="Count", 
+                     tickcolor = "#666",
+                     gridcolor = "#666",
+                     zerolinecolor = "#CCC"),
+        font = list(color="#CCCCCC"),
+        paper_bgcolor = c.fig.bg,
+        plot_bgcolor = c.fig.bg,
+        margin = list(l = 50, r=20, t=50)    
+      ) %>%
+      config(displayModeBar = TRUE,
+             displaylogo = FALSE,
+             cloud = FALSE,
+             modeBarButtonsToRemove = c('sendDataToCloud','hoverCompareCartesian','zoom2d')
+      ) 
+ 
+}
+
+
+tscovid1Deaths <- function(txtsize=1, inflation=FALSE) {
+
+    plot_ly(data = mydt.SA[(variable%in%"Patient Deaths")], 
             y = ~rolling, 
             x = ~Date,
             color = ~variable,
@@ -489,6 +537,11 @@ shinyServer(function(input, output, session) {
   output$plotCovidSATX <- renderPlotly({
     tscovid1()
   })
+
+  output$plotCovidDeathsSATX <- renderPlotly({
+    tscovid1Deaths()
+  })
+
 
   output$plotCovidVentsSATX <- renderPlotly({
     tsCovidVentsSA()
