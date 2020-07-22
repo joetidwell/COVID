@@ -93,6 +93,9 @@ mydt.state[,rollingDeaths:=frollmean(Deaths, 7, align="center"), by=State]
 
 mydt.state[,rankDeath:=rank(death/Population),by=Date]
 
+
+mydt.state <- mydt.state[,State:=as.character(State)]
+
 mydt.countries <- read.csv("data/countries.csv") %>% data.table
 mydt.countries[,Date:=as.IDate(dateRep, format="%d/%m/%Y")]
 mydt.countries[,Country:=countriesAndTerritories]
