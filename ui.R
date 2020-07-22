@@ -311,7 +311,7 @@ dashboardPage(
           ),
           fluidRow(
             column(width.main, 
-              box(title=HTML("<span class='box-title-l1'>Daily Country COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p>"),
+              box(title=HTML("<span class='box-title-l1'>Daily Country COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p><p class='box-title-l2' style='font-style: italic;'>Data should be interpreted with a grain of salt. Not all countries have the same standards for reporting data.</p>"),
                   footer=HTML("Data Source: <i><a href='http://opendata.ecdc.europa.eu/covid19/casedistribution/csv/' target='_blank'>http://opendata.ecdc.europa.eu/covid19/casedistribution/csv/</a></li></i>"),
                   plotlyOutput("plotCovidCountries", height = 300), width=12)),
             column(width.side, 
