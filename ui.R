@@ -296,6 +296,13 @@ dashboardPage(
           ),
           fluidRow(
             column(width.main, 
+                   box(title=HTML("<span class='box-title-l1'>San Antonio COVID-19 Patient Deaths</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
+                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
+                       plotlyOutput("plotCovidSADeaths", height = 300), width=12)
+                   ),
+          ),
+          fluidRow(
+            column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Hospital Resources</span><p class='box-title-l2'>Daily Percentages w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidVentsSA", height = 300), width=12)

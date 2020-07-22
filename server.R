@@ -532,6 +532,10 @@ shinyServer(function(input, output, session) {
     tscovid1()
   })
 
+  output$plotCovidSADeaths <- renderPlotly({
+    tscovid1Deaths()
+  })
+
   output$plotCovidVentsSA <- renderPlotly({
     tsCovidVentsSA()
   })
