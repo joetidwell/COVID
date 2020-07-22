@@ -216,7 +216,7 @@ dashboardPage(
             column(5,
               box(width=12,
                 title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
-                footer=HTML("Footer"),
+                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx</a></i>"),
                 leafletOutput("leafTX") %>% withSpinner(color="#0dc5c1")
               )
             ),
