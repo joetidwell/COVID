@@ -287,7 +287,7 @@ dashboardPage(
               # ),
               box(width=12,
                 title=HTML("Texas COVID19 Death Trends"),
-                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a></i>"),
+                footer=HTML("Data Sources: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a> & <a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                 HTML(joeBox2())              
               )
             )            
