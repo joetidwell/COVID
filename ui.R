@@ -131,36 +131,88 @@ joeBox <- function(metric="70%", text="Some Text", color="olive", width=3) {
     )
 }
 
-joeBox2 <- function(colors=c("#4CAF50","#008080","#4CAF50","#4CAF50")) {
+joeBox2 <- function(colors=c("#4CAF50","#008080","#4CAF50","#9932CC")) {
 
 paste0("
 <table class='darkTable' style='border: 1px solid black;'>
   <tbody>
-    <tr>
+    <!-- <tr>
       <td colspan='3' width='100%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
         <span style='font-size: 1.5em;''>Deaths Past 7 Days</span><br/>
         <span style='font-size: 3em;'>",textOutput("TXDeaths7", inline=TRUE),"</span><br/>
         <span style='font-size: 3em;'>",textOutput("TXDeaths7Per", inline=TRUE),"</span><br/>
         <span style='font-size: 1em; font-style: italic'>From previous 7 days</span>
       </td>
-    </tr>
+    </tr> --!>
     <tr>
       <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>TX Deaths<br/>7 Days</span><br/><br/>
+        <span style='font-size: 3em;'>",textOutput("TXDeaths7", inline=TRUE),"</span><br/><br/>
+        <span style='font-size: 1.5em; font-style: italic'>",textOutput("TXDeaths7Per", inline=TRUE)," from previous 7 days</span>
+      </td>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>San Antonio Deaths<br/>7 Days</span><br/><br/>
+        <span style='font-size: 3em;'>",textOutput("SADeaths7", inline=TRUE),"</span><br/><br/>
+        <span style='font-size: 1.5em; font-style: italic'>",textOutput("SADeaths7Per", inline=TRUE)," from previous 7 days</span>
+      </td>
+      <td width='33.3%' style='background-color: ",colors[4],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1.5em;'>Kendall County Deaths<br/>60 Days</span><br/><br/>
+        <span style='font-size: 3em;'>",textOutput("KendallDeaths60", inline=TRUE),"</span><br/><br/>
+        <span style='font-size: 1.5em; font-style: italic'>",textOutput("KendallDeaths60Per", inline=TRUE)," from previous 60 days</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+", collapse="")
+
+}
+
+SABox <- function(colors=c("#4CAF50","#008080","#4CAF50","#4CAF50")) {
+
+paste0("
+<table class='darkTable' style='border: 1px solid black; padding: 0, 0, 0, 0; margins: 0,0,0,0;'>
+  <tbody>
+    <tr>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 7 Days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("SADeaths7", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>",textOutput("SADeaths7Per", inline=TRUE)," from previous 7 days</span><br/>
+      </td>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
         <span style='font-size: 1em;'>Deaths Past 14 Days</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths14", inline=TRUE),"</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths14Per", inline=TRUE),"</span><br/>
-        <span style='font-size: 1em; font-style: italic'>From previous 14 days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("SADeaths14", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>",textOutput("SADeaths14Per", inline=TRUE)," from previous 14 days</span><br/>
       </td>
       <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
         <span style='font-size: 1em;'>Deaths Past 30 Days</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths30", inline=TRUE),"</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths30Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 2em;'>",textOutput("SADeaths30", inline=TRUE),"</span><br/>
+        <span style='font-size: 1em; font-style: italic'>",textOutput("SADeaths30Per", inline=TRUE)," from previous 30 days</span><br/>
+      </td>
+    </tr>
+  </tbody>
+</table>
+", collapse="")
+
+}
+
+KendallBox <- function(colors=c("#4CAF50","#008080","#4CAF50","#4CAF50")) {
+
+paste0("
+<table class='darkTable' style='border: 1px solid black;'>
+  <tbody>
+    <tr>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 60 Days</span><br/>
+        <span style='font-size: 2em;'>",textOutput("KendallDeaths60", inline=TRUE),"</span><br/>
+      </td>
+      <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
+        <span style='font-size: 1em;'>Deaths Past 30 Days</span><br/>
+        <span style='font-size: 2em;'>0</span><br/>
         <span style='font-size: 1em; font-style: italic'>From previous 30 days</span><br/>
       </td>
       <td width='33.3%' style='background-color: ",colors[2],"; border: 8px solid rgb(52,62,72);'>
         <span style='font-size: 1em;'>Deaths Past 60 Days</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths60", inline=TRUE),"</span><br/>
-        <span style='font-size: 2em;'>",textOutput("TXDeaths60Per", inline=TRUE),"</span><br/>
+        <span style='font-size: 2em;'>0</span><br/>
         <span style='font-size: 1em; font-style: italic'>From previous 60 days</span><br/>
       </td>
     </tr>
@@ -171,7 +223,7 @@ paste0("
 }
 
 
-width.main <- 10
+width.main <- 12
 width.side <- 2
 
 dashboardPage(
@@ -217,14 +269,14 @@ dashboardPage(
             )
           ),
           fluidRow(
-            column(5,
+            column(6,
               box(width=12,
                 title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
                 footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>TX DSHS</a></i>"),
-                leafletOutput("leafTX", height="400px") %>% withSpinner(color="#0dc5c1")
+                leafletOutput("leafTX", height="300px") %>% withSpinner(color="#0dc5c1")
               )
             ),
-            column(5,
+            column(6,
               # box(width=12,
               #   title=HTML("Percent Change Since Peak Week"),
               #   footer=HTML("Footer"),
@@ -236,36 +288,26 @@ dashboardPage(
               box(width=12,
                 title=HTML("Texas COVID19 Death Trends"),
                 footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a></i>"),
-                HTML(joeBox2())
+                HTML(joeBox2())              
               )
             )            
           ),
-          # fluidRow(
-          #   column(width.main, 
-          #     box(title=uiOutput("titleTXDaily"),
-          #         joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
-          #         joeBox(color="blue"),
-          #         joeBox(color="purple"),
-          #         joeBox(color="orange"),
-          #         width=12
-          #     )
-          #  ),
-          # ),
           fluidRow(
-            column(10, 
+            column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Hospital Resources</span><p class='box-title-l2'>Daily Percentages w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidVentsSATX", height = 300), width=12)
                    ),
-          ),          fluidRow(
-            column(10, 
+          ),          
+          fluidRow(
+            column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidSATX", height = 300), width=12)
                    ),
           ),
           fluidRow(
-            column(10, 
+            column(width.main, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio COVID-19 Patient Deaths</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidDeathsSATX", height = 300), width=12)
@@ -295,28 +337,28 @@ dashboardPage(
                    )
           ),
           fluidRow(
-            column(width.main, 
+            column(width.main-width.side, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidSA", height = 300), width=12)
                    ),
           ),
           fluidRow(
-            column(width.main, 
+            column(width.main-width.side, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio COVID-19 Patient Deaths</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidSADeaths", height = 300), width=12)
                    ),
           ),
           fluidRow(
-            column(width.main, 
+            column(width.main-width.side, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Hospital Resources</span><p class='box-title-l2'>Daily Percentages w/ 7-day Moving Average</p>"),
                        footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
                        plotlyOutput("plotCovidVentsSA", height = 300), width=12)
                    ),
           ),
           fluidRow(
-            column(width.main, 
+            column(width.main-width.side, 
               box(title=HTML("<span class='box-title-l1'>Daily U.S. State COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p>"),
                   footer=HTML("Data Sources: <i>
                     <ul>
@@ -336,7 +378,7 @@ dashboardPage(
             )
           ),
           fluidRow(
-            column(width.main, 
+            column(width.main-width.side, 
               box(title=HTML("<span class='box-title-l1'>Daily Country COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p><p class='box-title-l2' style='font-style: italic;'>Data should be interpreted with a grain of salt. Not all countries have the same standards for reporting data.</p>"),
                   footer=HTML("Data Source: <i><a href='http://opendata.ecdc.europa.eu/covid19/casedistribution/csv/' target='_blank'>http://opendata.ecdc.europa.eu/covid19/casedistribution/csv/</a></li></i>"),
                   plotlyOutput("plotCovidCountries", height = 300), width=12)),

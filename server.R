@@ -40,6 +40,7 @@ mydt <- as.data.table(json$features)
 mydt <- mydt[!is.na(attributes.Date)]
 names(mydt) <- gsub("attributes.","",names(mydt))
 mydt[,Date:=as.IDate(as.POSIXct(Date/1000, origin="1970-01-01"))]
+
 mydt.SA <- mydt[,.(Date,COVIDnICU,COVIDonVent,Deceased)]
 mydt.SA <- melt(mydt.SA, id.vars=c("Date"))
 mydt.SA <- mydt.SA[!is.na(value)]
@@ -150,16 +151,29 @@ mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
 
 # Get Past X data
 today <- mydt.tx[,max(Date)]
+today.SA <- mydt.SA[,max(Date)]
+today.Kendall <- mydt.tx[County=="Kendall", max(Date)] 
 
 TXDeaths7 <- mydt.tx[Date>today-7,sum(Deaths)]
 TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
 
+SADeaths7 <- mydt.SA[(Date>today.SA-7) & variable=="Patient Deaths",sum(value)]
+SADeaths7Pre <- mydt.SA[(Date<=today.SA-7) & (Date>today.SA-14) & variable=="Patient Deaths",sum(value)]
+
+KendallDeaths60 <- mydt.tx[County=="Kendall" & (Date>today.Kendall-60), sum(Deaths)]
+KendallDeaths60Pre <- mydt.tx[County=="Kendall" & (Date<=today.Kendall-60) & (Date>today.Kendall-120), sum(Deaths)]
 
 TXDeaths14 <- mydt.tx[Date>today-14,sum(Deaths)]
 TXDeaths14Pre <- mydt.tx[(Date<=today-14) & (Date>today-28),sum(Deaths)]
 
+SADeaths14 <- mydt.SA[(Date>today.SA-14) & variable=="Patient Deaths",sum(value)]
+SADeaths14Pre <- mydt.SA[(Date<=today.SA-14) & (Date>today.SA-28) & variable=="Patient Deaths",sum(value)]
+
 TXDeaths30 <- mydt.tx[Date>today-30,sum(Deaths)]
 TXDeaths30Pre <- mydt.tx[(Date<=today-30) & (Date>today-60),sum(Deaths)]
+
+SADeaths30 <- mydt.SA[(Date>today.SA-30) & variable=="Patient Deaths",sum(value)]
+SADeaths30Pre <- mydt.SA[(Date<=today.SA-30) & (Date>today.SA-60) & variable=="Patient Deaths",sum(value)]
 
 TXDeaths60 <- mydt.tx[Date>today-60,sum(Deaths)]
 TXDeaths60Pre <- mydt.tx[(Date<=today-60) & (Date>today-120),sum(Deaths)]
@@ -634,10 +648,23 @@ shinyServer(function(input, output, session) {
     if(num>0) {
       paste0("+",num,"%")
     } else {
-      paste0("-",num,"%")
+      paste0(num,"%")
     }
   })
 
+
+  output$SADeaths7 <- renderText({ 
+    comma(SADeaths7)
+  })
+
+  output$SADeaths7Per <- renderText({ 
+    num <- as.integer(round((SADeaths7-SADeaths7Pre)/SADeaths7Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0(num,"%")
+    }
+  })
 
   output$TXDeaths14 <- renderText({ 
     comma(TXDeaths14)
@@ -648,7 +675,20 @@ shinyServer(function(input, output, session) {
     if(num>0) {
       paste0("+",num,"%")
     } else {
-      paste0("-",num,"%")
+      paste0(num,"%")
+    }
+  })
+
+  output$SADeaths14 <- renderText({ 
+    comma(SADeaths14)
+  })
+
+  output$SADeaths14Per <- renderText({ 
+    num <- as.integer(round((SADeaths14-SADeaths14Pre)/SADeaths14Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0(num,"%")
     }
   })
 
@@ -662,7 +702,20 @@ shinyServer(function(input, output, session) {
     if(num>0) {
       paste0("+",num,"%")
     } else {
-      paste0("-",num,"%")
+      paste0(num,"%")
+    }
+  })
+
+  output$SADeaths30 <- renderText({ 
+    comma(SADeaths30)
+  })
+
+  output$SADeaths30Per <- renderText({ 
+    num <- as.integer(round((SADeaths30-SADeaths30Pre)/SADeaths30Pre,2)*100)
+    if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0(num,"%")
     }
   })
 
@@ -676,9 +729,28 @@ shinyServer(function(input, output, session) {
     if(num>0) {
       paste0("+",num,"%")
     } else {
-      paste0("-",num,"%")
+      paste0(num,"%")
     }
   })
+
+  output$KendallDeaths60 <- renderText({ 
+    comma(KendallDeaths60)
+  })
+
+
+  output$KendallDeaths60Per <- renderText({ 
+    num <- as.integer(round((KendallDeaths60-KendallDeaths60Pre)/KendallDeaths60Pre,2)*100)
+    if(is.na(num)) {
+      paste0("+/- ",0,"%")
+    }
+    else if(num>0) {
+      paste0("+",num,"%")
+    } else {
+      paste0(num,"%")
+    }
+  })
+
+
 
 
 ####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
