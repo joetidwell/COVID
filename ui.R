@@ -220,7 +220,7 @@ dashboardPage(
             column(5,
               box(width=12,
                 title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
-                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx</a></i>"),
+                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>TX DSHS</a></i>"),
                 leafletOutput("leafTX", height="400px") %>% withSpinner(color="#0dc5c1")
               )
             ),
@@ -235,7 +235,7 @@ dashboardPage(
               # ),
               box(width=12,
                 title=HTML("Texas COVID19 Death Trends"),
-                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx</a></i>"),
+                footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a></i>"),
                 HTML(joeBox2())
               )
             )            
@@ -254,20 +254,20 @@ dashboardPage(
           fluidRow(
             column(10, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Hospital Resources</span><p class='box-title-l2'>Daily Percentages w/ 7-day Moving Average</p>"),
-                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
+                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidVentsSATX", height = 300), width=12)
                    ),
           ),          fluidRow(
             column(10, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio Active COVID-19 Patients</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
-                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
+                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidSATX", height = 300), width=12)
                    ),
           ),
           fluidRow(
             column(10, 
                    box(title=HTML("<span class='box-title-l1'>San Antonio COVID-19 Patient Deaths</span><p class='box-title-l2'>Daily Counts w/ 7-day Moving Average</p>"),
-                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/</a></i>"),
+                       footer=HTML("Data Source: <i><a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
                        plotlyOutput("plotCovidDeathsSATX", height = 300), width=12)
                    ),
           )
