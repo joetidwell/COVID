@@ -359,7 +359,8 @@ dashboardPage(
           ),
           fluidRow(
             column(width.main-width.side, 
-              box(title=HTML("<span class='box-title-l1'>Daily U.S. State COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p>"),
+              box(title=HTML("<span class='box-title-l1'>Daily U.S. State COVID-19 Deaths per 1,000,000 Residents</span><p class='box-title-l2'>Daily Deaths w/ 7-day Moving Average</p>
+                              <p style='font-style: italic;'>On July 27, TX added 675 additional deaths through death certificate reviews. However only 44 deaths were truly new deaths on July 27th. This will inflate the daily increase in deaths until the timeseries has been backfilled based on this revision</p>"),
                   footer=HTML("Data Sources: <i>
                     <ul>
                       <li><a href='https://covidtracking.com/api/v1/states/daily.csv' target='_blank'>https://covidtracking.com/api/v1/states/daily.csv</a></li>

@@ -127,15 +127,31 @@ mydt.baselined[,Country:=as.character(Country)]
 ###
 
 
-
+pop.counties <- read.csv("data/counties.csv", header=FALSE) %>% data.table
+setnames(pop.counties, c("County","Population"))
+pop.counties[,County:=toupper(County)]
+setkey(pop.counties, County)
 
 fname <- "data/TexasCOVID19DailyCountyFatalityCountData.xlsx"
-# fname <- "~/Downloads/TexasCOVID19DailyCountyFatalityCountData.xlsx"
 colnames <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[3,] %>% as.character()
-colnames <- c("County","Population",as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=length(colnames)-2)))
-mydt.tx <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:267),] %>%
+
+# Convert dumbass data file column names
+date.names <- colnames[-1]
+idx.not.date <- which(!grepl("/",date.names))
+idx.date <- which(grepl("/",date.names))
+date.names[idx.date] <- as.character(as.IDate(date.names[idx.date], format="%m/%d/%y"))
+date.names[idx.not.date] <- as.character(as.IDate(as.integer(date.names[idx.not.date]), origin="1899-12-30"))
+colnames[-1] <- date.names
+colnames[1] <- "County"
+
+# colnames <- c("County","Population",as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=length(colnames)-2)))
+mydt.tx <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:270),] %>%
   data.table()
 setnames(mydt.tx, colnames)
+
+setkey(mydt.tx, County)
+mydt.tx <- pop.counties[mydt.tx]
+
 mydt.tx <- melt(mydt.tx, id.vars=c("County","Population"), variable.name="Date", value.name="Deaths.Cumulative") %>%
   data.table()
 mydt.tx[,Date:=as.IDate(Date)]
@@ -149,10 +165,11 @@ mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
 
 
 
+
 # Get Past X data
 today <- mydt.tx[,max(Date)]
 today.SA <- mydt.SA[,max(Date)]
-today.Kendall <- mydt.tx[County=="Kendall", max(Date)] 
+today.Kendall <- mydt.tx[County=="KENDALL", max(Date)] 
 
 TXDeaths7 <- mydt.tx[Date>today-7,sum(Deaths)]
 TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
@@ -160,8 +177,8 @@ TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
 SADeaths7 <- mydt.SA[(Date>today.SA-7) & variable=="Patient Deaths",sum(value)]
 SADeaths7Pre <- mydt.SA[(Date<=today.SA-7) & (Date>today.SA-14) & variable=="Patient Deaths",sum(value)]
 
-KendallDeaths60 <- mydt.tx[County=="Kendall" & (Date>today.Kendall-60), sum(Deaths)]
-KendallDeaths60Pre <- mydt.tx[County=="Kendall" & (Date<=today.Kendall-60) & (Date>today.Kendall-120), sum(Deaths)]
+KendallDeaths60 <- mydt.tx[County=="KENDALL" & (Date>today.Kendall-60), sum(Deaths)]
+KendallDeaths60Pre <- mydt.tx[County=="KENDALL" & (Date<=today.Kendall-60) & (Date>today.Kendall-120), sum(Deaths)]
 
 TXDeaths14 <- mydt.tx[Date>today-14,sum(Deaths)]
 TXDeaths14Pre <- mydt.tx[(Date<=today-14) & (Date>today-28),sum(Deaths)]
@@ -185,15 +202,40 @@ TXDeaths60Pre <- mydt.tx[(Date<=today-60) & (Date>today-120),sum(Deaths)]
 
 fname <- "data/TexasCOVID19DailyCountyCaseCountData.xlsx"
 colnames <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[3,] %>% as.character()
-colnames <- c("County",
-              "Population",
-              as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=3)),
-              as.character(seq.Date(from=as.IDate("2020-03-09"),by="day",length.out=5)),
-              as.character(seq.Date(from=as.IDate("2020-03-15"),by="day",length.out=length(colnames)-10))              
-              )
+
+
+# Convert dumbass data file column names
+date.names <- colnames[-1]
+idx.not.date <- which(grepl("Cases",date.names))
+
+tmp <- date.names[idx.not.date]
+tmp <- gsub("Cases ","",tmp)
+tmp <- gsub("\\*","",tmp)
+
+date.names[idx.not.date] <- tmp
+date.names <- paste0("2020-",date.names)
+
+colnames[-1] <- date.names
+colnames[1] <- "County"
+colnames <- gsub("\\r","",colnames)
+colnames <- gsub("\\n","",colnames)
+
+# colnames <- c("County",
+#               "Population",
+#               as.character(seq.Date(from=as.IDate("2020-03-04"),by="day",length.out=3)),
+#               as.character(seq.Date(from=as.IDate("2020-03-09"),by="day",length.out=5)),
+#               as.character(seq.Date(from=as.IDate("2020-03-15"),by="day",length.out=length(colnames)-10))              
+#               )
+
+
 mydt.tx.case <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[-c(1:3,259:268),] %>%
   data.table()
 setnames(mydt.tx.case, colnames)
+
+
+setkey(mydt.tx.case, County)
+mydt.tx.case <- pop.counties[mydt.tx.case]
+
 mydt.tx.case <- melt(mydt.tx.case, id.vars=c("County","Population"), variable.name="Date", value.name="Cases.Cumulative") %>%
   data.table()
 mydt.tx.case[,Cases.Cumulative := as.numeric(Cases.Cumulative)]
@@ -206,19 +248,20 @@ setkeyv(mydt.tx.case,c("County","Date"))
 setkeyv(mydt.tx,c("County","Date"))
 mydt.tx <- mydt.tx.case[,.(County,Date,Cases.Cumulative,Cases)][mydt.tx]
 
+
 ###
 ### Nursing home and long term facility deaths, state-wide
 ###
 
-fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
-nurse.dt <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
-setnames(nurse.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
-nurse.dt[,Source:="Nursing Homes"]
-fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
-long.dt <- read_excel(fname, sheet = 2, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
-setnames(long.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
-long.dt[,Source:="Long-Term Care Facilities"]
-nurse.tx.dt <- rbind(nurse.dt, long.dt)
+# fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
+# nurse.dt <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
+# setnames(nurse.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
+# nurse.dt[,Source:="Nursing Homes"]
+# fname <- "data/COVID-19OutbreaksinLong-termCareFacilities.xlsx"
+# long.dt <- read_excel(fname, sheet = 2, col_names = FALSE, col_types = NULL, na = "")[11,3:5] %>% data.table()
+# setnames(long.dt, c("Confirmed Cases","Fatalities","Reported Recoveries"))
+# long.dt[,Source:="Long-Term Care Facilities"]
+# nurse.tx.dt <- rbind(nurse.dt, long.dt)
 
 
 
@@ -237,7 +280,8 @@ tmpdt <- mydt.tx[Date==max(Date),
                  .(d.per.1000=Deaths.Cumulative/Population*100000,
                    Deaths=Deaths.Cumulative),
                  by=County]
-tmpdt[d.per.1000==0,d.per.1000:=NA]
+# tmpdt[d.per.1000==0,d.per.1000:=NA]
+tx.counties@data$NAME <- toupper(tx.counties@data$NAME)
 tx.counties_merged_sb <- geo_join(tx.counties, tmpdt, "NAME", "County")
 
 
@@ -246,7 +290,7 @@ tx.counties_merged_sb <- geo_join(tx.counties, tmpdt, "NAME", "County")
 tx.counties_merged_sb <- subset(tx.counties_merged_sb, !is.na(d.per.1000))
 pal <- colorBin("Reds", 
                 domain=tx.counties_merged_sb$d.per.1000, 
-                bins=c(0,1,5,10,25,50,75,100), 
+                bins=c(0,1,10,25,50,75,100), 
                 reverse=FALSE)
 
 
