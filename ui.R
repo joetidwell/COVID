@@ -121,13 +121,14 @@ theme_grey_dark <- shinyDashboardThemeDIY(
 
 style.boxtitle <- "style='font-size: 1.35em; color: #FFF;'"
 
-joeBox <- function(metric="70%", text="Some Text", color="olive", width=3) {
+joeBox <- function(metric="70%", title="Kendall County Data", text="Some Text", color="olive", width=3) {
   box(
       width=width,
       background=color,
       align="center",
-      HTML(paste0("<span style='font-size: 2.5em; font-weight: bold; color: white;'>",metric,"</span>
-                  <p style='font-size: 1.5em;'>",text,"</p>"))
+      HTML(paste0("<p style='font-size: 1.5em;'>",title,"</p>",
+                  "<span style='font-size: 3.5em; font-weight: bold; color: white;'>",metric,"</span>
+                  <p style='font-size: 1.25em;'>",text,"</p>"))
     )
 }
 
@@ -269,28 +270,47 @@ dashboardPage(
             )
           ),
           fluidRow(
-            column(6,
+            div(class = "col-sm-12 col-md-8 col-lg-8",
               box(width=12,
                 title=HTML("Texas County COVID-19 Deaths per 100,000 Residents"),
                 footer=HTML("Data Source: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx' target='_blank'>TX DSHS</a></i>"),
-                leafletOutput("leafTX", height="300px") %>% withSpinner(color="#0dc5c1")
-              )
+                leafletOutput("leafTX", height="500px") %>% withSpinner(color="#0dc5c1")
+              ),
             ),
-            column(6,
-              # box(width=12,
-              #   title=HTML("Percent Change Since Peak Week"),
-              #   footer=HTML("Footer"),
-              #     joeBox(metric=textOutput("TXTodayDeaths"), text="New Deaths", width=3),
-              #     joeBox(color="blue"),
-              #     joeBox(color="purple"),
-              #     joeBox(color="orange")
-              # ),
-              box(width=12,
-                title=HTML("Texas COVID19 Death Trends"),
-                footer=HTML("Data Sources: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a> & <a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
-                HTML(joeBox2())              
+            div(class = "col-sm-12 col-md-4 col-lg-4",
+              # div(class = "col-sm-12 col-md-6 col-lg-4",
+                
+                # box(width=12,
+                #   title=HTML("Texas COVID19 Death Trends"),
+                #   footer=HTML("Data Sources: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a> & <a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
+                              
+                  joeBox(width=12,
+                    title="TX Deaths - Past 7 Days",
+                    metric=textOutput("TXDeaths7", inline=TRUE),
+                    text=paste0(textOutput("TXDeaths7Per", inline=TRUE), " from previous 7 days"),
+                    color="blue"
+                  ),
+                  joeBox(width=12,
+                    title="S.A. Deaths - Past 7 Days",
+                    metric=textOutput("SADeaths7", inline=TRUE),
+                    text=paste0(textOutput("SADeaths7Per", inline=TRUE), " from previous 7 days"),
+                    color="blue"
+                  ),
+                  joeBox(width=12,
+                    title="Kendall Co. Deaths - Past 60 Days",
+                    metric=textOutput("KendallDeaths60", inline=TRUE),
+                    text="",
+                    color="purple"
+                  )
               )
-            )            
+                # )
+              # )
+
+              # box(width=12,
+              #   title=HTML("Texas COVID19 Death Trends"),
+              #   footer=HTML("Data Sources: <i><a href='https://dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyFatalityCountData.xlsx'>TX DSHS</a> & <a href='https://cosacovid-cosagis.hub.arcgis.com/datasets/covid-19-dashboard-data/' target='_blank'>City of San Antonio</a></i>"),
+              #   HTML(joeBox2())              
+              # )
           ),
           fluidRow(
             column(width.main, 
