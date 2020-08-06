@@ -149,6 +149,9 @@ mydt.tx <- read_excel(fname, sheet = 1, col_names = FALSE, col_types = NULL, na 
   data.table()
 setnames(mydt.tx, colnames)
 
+
+mydt.tx[,County:=toupper(County)]
+
 setkey(mydt.tx, County)
 mydt.tx <- pop.counties[mydt.tx]
 
@@ -156,6 +159,7 @@ mydt.tx <- melt(mydt.tx, id.vars=c("County","Population"), variable.name="Date",
   data.table()
 mydt.tx[,Date:=as.IDate(Date)]
 mydt.tx[,Population:=as.numeric(Population)]
+
 # Convert cumulative to daily counts
 setkey(mydt.tx,Date)
 mydt.tx[,Deaths.Cumulative:=as.numeric(Deaths.Cumulative)]
@@ -166,10 +170,11 @@ mydt.tx[, Deaths := Deaths.Cumulative - shift(Deaths.Cumulative, 1), by=County]
 
 
 
+
 # Get Past X data
 today <- mydt.tx[,max(Date)]
 today.SA <- mydt.SA[,max(Date)]
-today.Kendall <- mydt.tx[County=="KENDALL", max(Date)] 
+today.Kendall <- mydt.tx[toupper(County)=="KENDALL", max(Date)] 
 
 TXDeaths7 <- mydt.tx[Date>today-7,sum(Deaths)]
 TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
@@ -177,8 +182,8 @@ TXDeaths7Pre <- mydt.tx[(Date<=today-7) & (Date>today-14),sum(Deaths)]
 SADeaths7 <- mydt.SA[(Date>today.SA-7) & variable=="Patient Deaths",sum(value)]
 SADeaths7Pre <- mydt.SA[(Date<=today.SA-7) & (Date>today.SA-14) & variable=="Patient Deaths",sum(value)]
 
-KendallDeaths60 <- mydt.tx[County=="KENDALL" & (Date>today.Kendall-60), sum(Deaths)]
-KendallDeaths60Pre <- mydt.tx[County=="KENDALL" & (Date<=today.Kendall-60) & (Date>today.Kendall-120), sum(Deaths)]
+KendallDeaths60 <- mydt.tx[toupper(County)=="KENDALL" & (Date>today.Kendall-60), sum(Deaths)]
+KendallDeaths60Pre <- mydt.tx[toupper(County)=="KENDALL" & (Date<=today.Kendall-60) & (Date>today.Kendall-120), sum(Deaths)]
 
 TXDeaths14 <- mydt.tx[Date>today-14,sum(Deaths)]
 TXDeaths14Pre <- mydt.tx[(Date<=today-14) & (Date>today-28),sum(Deaths)]
